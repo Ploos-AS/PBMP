@@ -1,0 +1,9 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"https://ploos.no/pbmp/1/envelope.schema.json",
+  "title":"PBMP/1 envelope",
+  "type":"object",
+  "required":["pbmp","type"],
+  "properties":{"pbmp":{"const":1},"type":{"enum":["request","response","event"]},"id":{"type":"string"},"method":{"type":"string"},"params":{"type":"object"},"ok":{"type":"boolean"},"result":{},"error":{"type":"object"},"event":{"type":"string"},"data":{}},
+  "additionalProperties":true
+}
