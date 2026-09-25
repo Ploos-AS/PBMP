@@ -47,6 +47,14 @@ Event:
 
 Capabilities are additive. Unknown capabilities MUST be ignored by clients.
 
+## `channels.list`
+
+A bot advertising `channels.list` MUST accept an empty params object and return:
+
+    {"channels":[{"network":"libera","name":"#example","state":"joined"}]}
+
+Each channel object MUST contain `network`, `name`, and `state`. `state` is an extensible string; initial values are `joined`, `configured`, and `disconnected`. Clients MUST tolerate unknown states. The method is read-only and MUST NOT join or part channels as a side effect.
+
 ## Security
 
 PBMP/1 does not define anonymous remote administration. A network-accessible transport MUST authenticate peers and provide confidentiality and integrity. Implementations SHOULD default to a local-only transport. Authorization SHOULD be capability/method scoped. Secrets MUST NOT be returned by configuration APIs unless a future specification explicitly defines a protected secret mechanism.
