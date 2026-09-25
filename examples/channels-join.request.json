@@ -1,0 +1,1 @@
+{"pbmp":1,"type":"request","id":"join-1","method":"channels.join","params":{"network":"libera","name":"#example"}}
