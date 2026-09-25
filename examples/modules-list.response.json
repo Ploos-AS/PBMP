@@ -1,0 +1,1 @@
+{"pbmp":1,"type":"response","id":"modules-1","ok":true,"result":{"modules":[{"id":"hello.tengo","runtime":"tengo","state":"active","capabilities":["http"]}]}}

@@ -35,7 +35,9 @@ Event:
 
 ## Initial optional capabilities
 
-* `channels.list`\n* `channels.join`\n* `channels.part`
+* `channels.list`
+* `channels.join`
+* `channels.part`
 * `modules.list`
 * `scripts.list`
 * `logs.stream`
@@ -46,6 +48,16 @@ Event:
 * `commands.execute`
 
 Capabilities are additive. Unknown capabilities MUST be ignored by clients.
+
+## `modules.list`
+
+A bot advertising `modules.list` MUST accept an empty params object and return a `modules` array. Each module MUST contain a stable `id` for the current bot configuration, a `runtime` identifier, and an extensible `state` string. Initial states are `active`, `disabled`, and `error`. An optional `capabilities` array describes permissions/features granted to that module.
+
+Example:
+
+    {"modules":[{"id":"hello.tengo","runtime":"tengo","state":"active","capabilities":["http"]}]}
+
+The method is read-only. `runtime` identifies the execution environment (for example `lua`, `tengo`, or `arexx`) and MUST NOT be used by clients to infer management capabilities; those remain PBMP capabilities.
 
 ## `channels.list`
 
