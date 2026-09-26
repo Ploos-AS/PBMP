@@ -10,4 +10,10 @@ PBMP is an optional management integration. A PBMP-compatible IRC bot MUST NOT r
 
 See [spec/PBMP-1.md](spec/PBMP-1.md).
 
+## Conformance
+
+PBMP/1 M0 includes implementation-neutral conformance vectors and a dependency-free validator. Implementations can publish a machine-readable qualification report tied to the exact implementation version and PBMP suite revision used for testing.
+
+See [spec/CONFORMANCE.md](spec/CONFORMANCE.md) and [schema/conformance-report.schema.json](schema/conformance-report.schema.json).
+
 License: MIT.
