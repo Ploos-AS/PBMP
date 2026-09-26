@@ -17,3 +17,20 @@ jobs:
           python-version: "3.x"
       - name: Validate PBMP/1 M0 vectors
         run: python3 tools/validate_vectors.py
+      - name: Start reference endpoint
+        run: |
+          python3 tools/reference_endpoint.py --socket /tmp/pbmp-reference.sock &
+          echo $! > /tmp/pbmp-reference.pid
+          for i in {1..50}; do
+            test -S /tmp/pbmp-reference.sock && exit 0
+            sleep 0.1
+          done
+          exit 1
+      - name: Qualify reference endpoint
+        run: |
+          python3 tools/qualify_endpoint.py \
+            --socket /tmp/pbmp-reference.sock \
+            --implementation-name pbmp-reference-endpoint \
+            --implementation-version M0 \
+            --output pbmp-conformance-report.json
+          python3 -c 'import json; r=json.load(open("pbmp-conformance-report.json")); assert r["result"] == "pass"'
