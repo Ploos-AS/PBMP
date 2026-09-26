@@ -3,43 +3,150 @@
   "$id": "https://ploos.dev/pbmp/schema/conformance-report.schema.json",
   "title": "PBMP/1 Conformance Report",
   "type": "object",
-  "required": ["pbmp", "profile", "implementation", "suite", "result", "required_methods"],
+  "required": [
+    "pbmp",
+    "profile",
+    "implementation",
+    "suite",
+    "result",
+    "required_methods"
+  ],
   "properties": {
-    "pbmp": {"const": 1},
-    "profile": {"const": "M0"},
+    "pbmp": {
+      "const": 1
+    },
+    "profile": {
+      "enum": [
+        "bot-m0",
+        "endpoint-m0"
+      ]
+    },
     "implementation": {
       "type": "object",
-      "required": ["name", "version"],
+      "required": [
+        "name",
+        "version"
+      ],
       "properties": {
-        "name": {"type": "string", "minLength": 1},
-        "version": {"type": "string", "minLength": 1}
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "version": {
+          "type": "string",
+          "minLength": 1
+        }
       },
       "additionalProperties": true
     },
     "suite": {
       "type": "object",
-      "required": ["revision"],
+      "required": [
+        "revision"
+      ],
       "properties": {
-        "revision": {"type": "string", "minLength": 1}
+        "revision": {
+          "type": "string",
+          "minLength": 1
+        }
       },
       "additionalProperties": true
     },
-    "result": {"enum": ["pass", "fail"]},
+    "result": {
+      "enum": [
+        "pass",
+        "fail"
+      ]
+    },
     "required_methods": {
       "type": "object",
-      "required": ["pbmp.info", "capabilities.list", "bot.info", "networks.list"],
       "properties": {
-        "pbmp.info": {"enum": ["pass", "fail"]},
-        "capabilities.list": {"enum": ["pass", "fail"]},
-        "bot.info": {"enum": ["pass", "fail"]},
-        "networks.list": {"enum": ["pass", "fail"]}
+        "pbmp.info": {
+          "enum": [
+            "pass",
+            "fail"
+          ]
+        },
+        "capabilities.list": {
+          "enum": [
+            "pass",
+            "fail"
+          ]
+        },
+        "bot.info": {
+          "enum": [
+            "pass",
+            "fail"
+          ]
+        },
+        "networks.list": {
+          "enum": [
+            "pass",
+            "fail"
+          ]
+        },
+        "endpoint.info": {
+          "enum": [
+            "pass",
+            "fail"
+          ]
+        }
       },
       "additionalProperties": false
     },
     "capabilities_tested": {
       "type": "object",
-      "additionalProperties": {"enum": ["pass", "fail", "not-tested"]}
+      "additionalProperties": {
+        "enum": [
+          "pass",
+          "fail",
+          "not-tested"
+        ]
+      }
     }
   },
-  "additionalProperties": true
+  "additionalProperties": true,
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "profile": {
+            "const": "bot-m0"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "required_methods": {
+            "required": [
+              "pbmp.info",
+              "capabilities.list",
+              "bot.info",
+              "networks.list"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "profile": {
+            "const": "endpoint-m0"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "required_methods": {
+            "required": [
+              "pbmp.info",
+              "capabilities.list",
+              "endpoint.info"
+            ]
+          }
+        }
+      }
+    }
+  ]
 }
