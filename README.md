@@ -17,3 +17,7 @@ PBMP/1 M0 includes implementation-neutral conformance vectors and a dependency-f
 See [spec/CONFORMANCE.md](spec/CONFORMANCE.md) and [schema/conformance-report.schema.json](schema/conformance-report.schema.json).
 
 License: MIT.
+
+## Conformance profiles
+
+PBMP/1 currently defines the original M0 bot contract and the additive [Endpoint Profile M0](spec/ENDPOINT-PROFILE-M0.md). The endpoint profile is intended for managed services that are not necessarily bots; AmBNC is its initial reference consumer.
