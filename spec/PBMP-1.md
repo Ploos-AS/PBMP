@@ -48,6 +48,7 @@ Event:
 * `metrics.read`
 * `config.schema`
 * `config.read`
+* `config.read`
 * `config.write`
 * `commands.execute`
 
@@ -96,6 +97,12 @@ Read-only snapshot metrics. An implementation SHOULD return counters/gauges it c
 Read-only bounded recent-log retrieval. The result is `{"entries":[...]}`; each entry contains `level` and `message`, with optional `time` and `source`. Implementations MUST bound retained entries and response size. Secrets and credentials MUST NOT be logged or returned. `logs.read` is snapshot/polling and is distinct from the reserved `logs.stream` event/subscription capability.
 
 `logs.stream` remains reserved until PBMP defines subscription lifetime and multi-message transport framing.
+
+## `config.schema` and `config.read`
+
+These methods expose a deliberately safe management view, not the process environment or raw configuration file. `config.schema` returns `{"fields":[...]}`; each field has `name`, `type`, and `reload` where reload is `live`, `reconnect`, or `restart`. `config.read` returns `{"config":{...}}` containing only fields present in that schema.
+
+Secret values, credential identifiers, passwords, authentication tokens, private keys, and implementation-local management endpoints MUST NOT be returned. Implementations SHOULD omit sensitive policy fields when disclosure is unnecessary for ordinary bot operation. Advertising either read capability does not imply `config.write`.
 
 ## Security
 
