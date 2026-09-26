@@ -17,3 +17,21 @@ The report is evidence about a particular implementation version tested against 
 An overall `pass` requires every required M0 method to pass. Optional capabilities do not affect M0 conformance unless a future profile explicitly requires them.
 
 Reports MUST NOT contain credentials, authentication tokens, private keys, raw configuration secrets, or private management endpoints.
+
+## Local endpoint qualification runner
+
+`tools/qualify_endpoint.py` exercises the PBMP/1 M0 required methods against the local Unix-domain JSONL transport profile and writes a conformance report.
+
+Example:
+
+```sh
+python3 tools/qualify_endpoint.py \\
+  --socket /run/example/pbmp.sock \\
+  --implementation-name example-bot \\
+  --implementation-version 0.1.0 \\
+  --output pbmp-conformance-report.json
+```
+
+The runner opens a fresh local stream connection for each request, sends exactly one newline-terminated request, requires exactly one newline-terminated response, verifies the echoed request ID, and applies the required-method semantic checks. It exits non-zero if any required method fails.
+
+The implementation name and version supplied to the runner identify the artifact being qualified; automated integrations SHOULD obtain these values from their build/release metadata rather than mutable runtime configuration.
