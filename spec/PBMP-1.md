@@ -39,6 +39,9 @@ Event:
 * `channels.join`
 * `channels.part`
 * `modules.list`
+* `modules.reload`
+* `modules.enable`
+* `modules.disable`
 * `scripts.list`
 * `logs.stream`
 * `metrics.read`
@@ -58,6 +61,10 @@ Example:
     {"modules":[{"id":"hello.tengo","runtime":"tengo","state":"active","capabilities":["http"]}]}
 
 The method is read-only. `runtime` identifies the execution environment (for example `lua`, `tengo`, or `arexx`) and MUST NOT be used by clients to infer management capabilities; those remain PBMP capabilities.
+
+## `modules.reload`, `modules.enable`, and `modules.disable`
+
+These are independent write capabilities. Each accepts `{"id":"module-id"}`. Advertising `modules.list` MUST NOT imply lifecycle control. A successful response means the requested lifecycle transaction completed and returns `{"id":"module-id","state":"active"}` (or `disabled`). Reload implementations SHOULD preserve the previously active module when validation/loading of the replacement fails. Enable/disable SHOULD be transactional where the runtime supports rollback. Unsupported lifecycle operations MUST not be advertised.
 
 ## `channels.list`
 
