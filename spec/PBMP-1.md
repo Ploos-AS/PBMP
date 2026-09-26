@@ -43,6 +43,7 @@ Event:
 * `modules.enable`
 * `modules.disable`
 * `scripts.list`
+* `logs.read`
 * `logs.stream`
 * `metrics.read`
 * `config.schema`
@@ -85,6 +86,16 @@ Successful result:
     {"network":"libera","name":"#example","state":"joining"}
 
 For PART, the immediate state is implementation-dependent (normally `parting` or `configured`) and clients MUST continue to use `channels.list` for authoritative observed state.
+
+## `metrics.read`
+
+Read-only snapshot metrics. An implementation SHOULD return counters/gauges it can measure reliably under a `metrics` object. Common names are `irc.rx_lines`, `irc.tx_lines`, `irc.reconnects`, and `session.uptime_seconds`. Values MUST be JSON numbers. Clients MUST tolerate unknown or missing metric names.
+
+## `logs.read`
+
+Read-only bounded recent-log retrieval. The result is `{"entries":[...]}`; each entry contains `level` and `message`, with optional `time` and `source`. Implementations MUST bound retained entries and response size. Secrets and credentials MUST NOT be logged or returned. `logs.read` is snapshot/polling and is distinct from the reserved `logs.stream` event/subscription capability.
+
+`logs.stream` remains reserved until PBMP defines subscription lifetime and multi-message transport framing.
 
 ## Security
 
