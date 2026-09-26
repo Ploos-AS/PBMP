@@ -33,6 +33,24 @@ Event:
 * `bot.info` — bot identity, implementation name/version and lifecycle state.
 * `networks.list` — configured networks and connection state.
 
+## Required method contracts
+
+### `pbmp.info`
+
+Accepts an empty params object and returns `{"version":1,"implementation":{"name":"...","version":"..."}}`. `version` MUST be the PBMP major version implemented by the endpoint. The implementation object MUST contain non-empty `name` and `version` strings. Additional implementation metadata MAY be returned and MUST be ignored when unknown.
+
+### `capabilities.list`
+
+Accepts an empty params object and returns `{"capabilities":[...]}`. Each entry MUST be a non-empty string naming an optional PBMP capability/method supported by the endpoint. The array MUST NOT be interpreted as granting authorization by itself; transport or endpoint policy MAY further restrict an advertised write method. Clients MUST ignore unknown capability names.
+
+### `bot.info`
+
+Accepts an empty params object and returns `{"bot":{"id":"...","implementation":{"name":"...","version":"..."},"state":"..."}}`. `id` MUST be a stable non-empty identifier for the bot within the management endpoint. Initial lifecycle states are `starting`, `running`, `stopping`, `stopped`, and `error`; clients MUST tolerate unknown states.
+
+### `networks.list`
+
+Accepts an empty params object and returns `{"networks":[...]}`. Each network MUST contain a stable non-empty `id` and an extensible `state` string. Initial states are `configured`, `connecting`, `connected`, `disconnecting`, `disconnected`, and `error`. A network MAY include a human-readable `name`. Clients MUST use `id`, not `name`, as the management identifier and MUST tolerate unknown states.
+
 ## Initial optional capabilities
 
 * `channels.list`
