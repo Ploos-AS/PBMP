@@ -72,6 +72,17 @@ def validate_required_result(method, result):
         if not isinstance(impl, dict) or not all(isinstance(impl.get(k), str) and impl[k] for k in ("name", "version")):
             raise ValueError("bot.info implementation requires name and version")
 
+    elif method == "endpoint.info":
+        endpoint = result.get("endpoint")
+        if not isinstance(endpoint, dict):
+            raise ValueError("endpoint.info requires endpoint object")
+        for key in ("id", "kind", "state"):
+            if not isinstance(endpoint.get(key), str) or not endpoint[key]:
+                raise ValueError(f"endpoint.info requires non-empty {key}")
+        impl = endpoint.get("implementation")
+        if not isinstance(impl, dict) or not all(isinstance(impl.get(k), str) and impl[k] for k in ("name", "version")):
+            raise ValueError("endpoint.info implementation requires name and version")
+
     elif method == "networks.list":
         networks = result.get("networks")
         if not isinstance(networks, list):
