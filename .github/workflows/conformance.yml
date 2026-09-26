@@ -1,0 +1,19 @@
+name: PBMP conformance
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  conformance:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - name: Validate PBMP/1 M0 vectors
+        run: python3 tools/validate_vectors.py
