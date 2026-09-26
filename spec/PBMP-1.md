@@ -86,7 +86,7 @@ Successful result:
 
     {"network":"libera","name":"#example","state":"joining"}
 
-For PART, the immediate state is implementation-dependent (normally `parting` or `configured`). Runtime-requested channels SHOULD remain discoverable through `channels.list` while their join/part lifecycle is relevant; clients MUST NOT assume the startup configuration is the complete registry. and clients MUST continue to use `channels.list` for authoritative observed state.
+For PART, the immediate state is implementation-dependent (normally `parting` or `configured`). Runtime-requested channels SHOULD remain discoverable through `channels.list` while their join/part lifecycle is relevant; clients MUST NOT assume the startup configuration is the complete registry; clients MUST continue to use `channels.list` for authoritative observed state.
 
 ## `metrics.read`
 
@@ -103,6 +103,12 @@ Read-only bounded recent-log retrieval. The result is `{"entries":[...]}`; each 
 These methods expose a deliberately safe management view, not the process environment or raw configuration file. `config.schema` returns `{"fields":[...]}`; each field has `name`, `type`, and `reload` where reload is `live`, `reconnect`, or `restart`. `config.read` returns `{"config":{...}}` containing only fields present in that schema.
 
 Secret values, credential identifiers, passwords, authentication tokens, private keys, and implementation-local management endpoints MUST NOT be returned. Implementations SHOULD omit sensitive policy fields when disclosure is unnecessary for ordinary bot operation. Advertising either read capability does not imply `config.write`.
+
+## Local stream transport profile
+
+The PBMP/1 local stream profile uses UTF-8 JSON Lines. Each connection carries exactly one request line followed by exactly one response line. A line MUST end with LF; CRLF MAY be accepted. Receivers MUST reject an unterminated request, trailing non-whitespace data, or multiple request objects on one connection.
+
+Implementations of this profile MUST accept request lines up to 4096 bytes including the line terminator and MUST bound larger input. Clients MUST accept response lines up to 16384 bytes including the line terminator; servers MUST NOT emit a larger response on this profile. Implementations MAY use smaller internal result limits only when every advertised method can still produce a conforming response. These limits are transport bounds, not permission to expose unbounded logs or configuration data.
 
 ## Security
 
