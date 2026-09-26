@@ -74,7 +74,7 @@ A bot advertising `channels.list` MUST accept an empty params object and return:
 
     {"channels":[{"network":"libera","name":"#example","state":"joined"}]}
 
-Each channel object MUST contain `network`, `name`, and `state`. `state` is an extensible string; initial values are `joined`, `configured`, and `disconnected`. Clients MUST tolerate unknown states. The method is read-only and MUST NOT join or part channels as a side effect.
+Each channel object MUST contain `network`, `name`, and `state`. `state` is an extensible string; initial values are `joined`, `configured`, `joining`, `parting`, and `disconnected`. Clients MUST tolerate unknown states. The method is read-only and MUST NOT join or part channels as a side effect.
 
 ## `channels.join` and `channels.part`
 
@@ -86,7 +86,7 @@ Successful result:
 
     {"network":"libera","name":"#example","state":"joining"}
 
-For PART, the immediate state is implementation-dependent (normally `parting` or `configured`) and clients MUST continue to use `channels.list` for authoritative observed state.
+For PART, the immediate state is implementation-dependent (normally `parting` or `configured`). Runtime-requested channels SHOULD remain discoverable through `channels.list` while their join/part lifecycle is relevant; clients MUST NOT assume the startup configuration is the complete registry. and clients MUST continue to use `channels.list` for authoritative observed state.
 
 ## `metrics.read`
 
