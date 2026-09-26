@@ -1,0 +1,1 @@
+{"pbmp":1,"type":"response","id":"bad-3","ok":true,"result":{"bot":{"implementation":{"name":"example","version":"0.1"},"state":"running"}},"_method":"bot.info"}
