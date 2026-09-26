@@ -48,7 +48,6 @@ Event:
 * `metrics.read`
 * `config.schema`
 * `config.read`
-* `config.read`
 * `config.write`
 * `commands.execute`
 
