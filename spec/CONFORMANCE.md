@@ -35,3 +35,11 @@ python3 tools/qualify_endpoint.py \\
 The runner opens a fresh local stream connection for each request, sends exactly one newline-terminated request, requires exactly one newline-terminated response, verifies the echoed request ID, and applies the required-method semantic checks. It exits non-zero if any required method fails.
 
 The implementation name and version supplied to the runner identify the artifact being qualified; automated integrations SHOULD obtain these values from their build/release metadata rather than mutable runtime configuration.
+
+## Pinning the qualification suite
+
+Consumer repositories SHOULD pin PBMP qualification to an immutable PBMP Git commit or release tag. A moving branch such as `main` MUST NOT be used as the recorded `suite.revision` for a published qualification result.
+
+A consumer CI job SHOULD check out the pinned PBMP revision, start the implementation under test with its local PBMP endpoint enabled, run `tools/qualify_endpoint.py`, and archive the resulting JSON report. Updating the pinned PBMP revision is an explicit requalification event.
+
+This rule keeps historical PASS reports reproducible even as PBMP gains new optional capabilities, stronger tests, or future profiles.
