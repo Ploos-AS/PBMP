@@ -11,7 +11,10 @@ import sys
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 from validate_vectors import validate_envelope, validate_required_result
 
-METHODS = ("pbmp.info", "capabilities.list", "bot.info", "networks.list")
+PROFILES = {
+    "bot-m0": ("pbmp.info", "capabilities.list", "bot.info", "networks.list"),
+    "endpoint-m0": ("pbmp.info", "capabilities.list", "endpoint.info"),
+}
 
 
 def request(sock_path, method, ident):
@@ -54,6 +57,7 @@ def git_revision(root):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--socket", required=True, help="Unix-domain socket path")
+    parser.add_argument("--profile", choices=sorted(PROFILES), default="bot-m0")
     parser.add_argument("--implementation-name", required=True)
     parser.add_argument("--implementation-version", required=True)
     parser.add_argument("--output", default="pbmp-conformance-report.json")
@@ -61,9 +65,9 @@ def main():
 
     results = {}
     failures = []
-    for index, method in enumerate(METHODS, 1):
+    for index, method in enumerate(PROFILES[args.profile], 1):
         try:
-            request(args.socket, method, f"pbmp-m0-{index}")
+            request(args.socket, method, f"pbmp-{args.profile}-{index}")
             results[method] = "pass"
         except Exception as exc:
             results[method] = "fail"
@@ -72,7 +76,7 @@ def main():
     root = pathlib.Path(__file__).resolve().parents[1]
     report = {
         "pbmp": 1,
-        "profile": "M0",
+        "profile": args.profile,
         "implementation": {"name": args.implementation_name, "version": args.implementation_version},
         "suite": {"revision": git_revision(root)},
         "result": "pass" if not failures else "fail",
