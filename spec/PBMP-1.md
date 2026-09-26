@@ -51,8 +51,25 @@ Accepts an empty params object and returns `{"bot":{"id":"...","implementation":
 
 Accepts an empty params object and returns `{"networks":[...]}`. Each network MUST contain a stable non-empty `id` and an extensible `state` string. Initial states are `configured`, `connecting`, `connected`, `disconnecting`, `disconnected`, and `error`. A network MAY include a human-readable `name`. Clients MUST use `id`, not `name`, as the management identifier and MUST tolerate unknown states.
 
+## General managed endpoint identity
+
+PBMP/1 M0 remains bot-oriented and keeps `bot.info` as a required method for the M0 bot profile. Non-bot services MUST NOT fabricate a bot identity merely to reuse PBMP.
+
+The optional `endpoint.info` capability provides general identity for bots, agents, services, gateways, and other managed endpoints. It accepts an empty params object and returns:
+
+```json
+{"endpoint":{"id":"stable-id","kind":"service","implementation":{"name":"example","version":"1.0.0"},"state":"running"}}
+```
+
+`id` MUST be a stable non-empty management identifier. `kind` MUST be a non-empty string. Initial kinds are `bot`, `agent`, `service`, and `gateway`; clients MUST tolerate unknown kinds. `implementation.name`, `implementation.version`, and `state` MUST be non-empty strings.
+
+A bot MAY advertise `endpoint.info` in addition to required `bot.info`. When both describe the same managed process, their stable identity and implementation metadata SHOULD be consistent.
+
+Support for `endpoint.info` does not by itself define a non-bot conformance profile. Such a profile requires a future specification; PBMP/1 M0 conformance continues to require the four M0 bot methods.
+
 ## Initial optional capabilities
 
+* `endpoint.info`
 * `channels.list`
 * `channels.join`
 * `channels.part`
