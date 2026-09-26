@@ -1,0 +1,1 @@
+{"pbmp":1,"type":"response","id":"endpoint-1","ok":true,"result":{"endpoint":{"id":"botai","kind":"service","implementation":{"name":"BotAI","version":"0.1.0"},"state":"running"}}}
