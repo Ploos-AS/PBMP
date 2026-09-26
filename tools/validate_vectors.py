@@ -46,6 +46,45 @@ def validate_envelope(obj):
             raise ValueError("event name must be a non-empty string")
 
 
+def validate_required_result(method, result):
+    if not isinstance(result, dict):
+        raise ValueError("result must be an object")
+
+    if method == "pbmp.info":
+        if result.get("version") != 1:
+            raise ValueError("pbmp.info version must equal 1")
+        impl = result.get("implementation")
+        if not isinstance(impl, dict) or not all(isinstance(impl.get(k), str) and impl[k] for k in ("name", "version")):
+            raise ValueError("pbmp.info implementation requires name and version")
+
+    elif method == "capabilities.list":
+        caps = result.get("capabilities")
+        if not isinstance(caps, list) or not all(isinstance(x, str) and x for x in caps):
+            raise ValueError("capabilities must be an array of non-empty strings")
+
+    elif method == "bot.info":
+        bot = result.get("bot")
+        if not isinstance(bot, dict) or not isinstance(bot.get("id"), str) or not bot["id"]:
+            raise ValueError("bot.info requires non-empty bot id")
+        if not isinstance(bot.get("state"), str) or not bot["state"]:
+            raise ValueError("bot.info requires non-empty state")
+        impl = bot.get("implementation")
+        if not isinstance(impl, dict) or not all(isinstance(impl.get(k), str) and impl[k] for k in ("name", "version")):
+            raise ValueError("bot.info implementation requires name and version")
+
+    elif method == "networks.list":
+        networks = result.get("networks")
+        if not isinstance(networks, list):
+            raise ValueError("networks must be an array")
+        for network in networks:
+            if not isinstance(network, dict):
+                raise ValueError("network must be an object")
+            if not isinstance(network.get("id"), str) or not network["id"]:
+                raise ValueError("network requires non-empty id")
+            if not isinstance(network.get("state"), str) or not network["state"]:
+                raise ValueError("network requires non-empty state")
+
+
 def main():
     failures = []
 
@@ -75,11 +114,37 @@ def main():
     if missing:
         failures.append("missing required method vectors: " + ", ".join(sorted(missing)))
 
+    requests_by_id = {}
+    for path in sorted((VECTORS / "methods").glob("*.request.jsonl")):
+        try:
+            obj = load_one(path)
+            requests_by_id[obj["id"]] = obj["method"]
+        except Exception:
+            pass
+
     for path in sorted((VECTORS / "methods").glob("*.response.jsonl")):
         try:
-            validate_envelope(load_one(path))
+            obj = load_one(path)
+            validate_envelope(obj)
+            method = requests_by_id.get(obj["id"])
+            if method is None:
+                raise ValueError("response id has no matching method request")
+            if obj["ok"]:
+                validate_required_result(method, obj["result"])
         except Exception as exc:
             failures.append(f"{path.relative_to(ROOT)}: invalid method response: {exc}")
+
+    for path in sorted((VECTORS / "methods-invalid").glob("*.jsonl")):
+        try:
+            obj = load_one(path)
+            validate_envelope(obj)
+            method = obj.pop("_method", None)
+            if method is None:
+                raise ValueError("negative semantic vector lacks _method")
+            validate_required_result(method, obj["result"])
+        except Exception:
+            continue
+        failures.append(f"{path.relative_to(ROOT)}: expected semantic rejection")
 
     if failures:
         for failure in failures:
