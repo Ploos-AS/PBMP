@@ -1,0 +1,22 @@
+{
+  "pbmp": 1,
+  "profile": "M0",
+  "implementation": {
+    "name": "example-bot",
+    "version": "0.1.0"
+  },
+  "suite": {
+    "revision": "PBMP_GIT_REVISION"
+  },
+  "result": "pass",
+  "required_methods": {
+    "pbmp.info": "pass",
+    "capabilities.list": "pass",
+    "bot.info": "pass",
+    "networks.list": "pass"
+  },
+  "capabilities_tested": {
+    "channels.list": "pass",
+    "metrics.read": "not-tested"
+  }
+}
