@@ -8,7 +8,7 @@ M0 defines PBMP/1 discovery, capabilities, status and events as JSON messages. T
 
 PBMP is an optional management integration. A PBMP-compatible IRC bot MUST NOT require PBMP, BotWeb, BotAI, or another external Ploos service for normal IRC operation. Implementations MUST treat PBMP as an adapter/control interface around an independently functional bot core. Loss or disablement of PBMP MUST NOT stop the bot's IRC service.
 
-See [spec/PBMP-1.md](spec/PBMP-1.md).
+See [spec/PBMP-1.md](spec/PBMP-1.md). Integration boundaries for BotWeb, BotAI, and other consumers are defined in [spec/INTEGRATIONS.md](spec/INTEGRATIONS.md).
 
 ## Conformance
 
