@@ -1,0 +1,1 @@
+{"_method":"networks.list","pbmp":1,"type":"response","id":"bad-obs-1","ok":true,"result":{"networks":[{"id":"network-1","state":"disconnected","retry_seconds":-1}]}}
