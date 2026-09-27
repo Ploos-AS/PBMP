@@ -51,6 +51,17 @@ Accepts an empty params object and returns `{"bot":{"id":"...","implementation":
 
 Accepts an empty params object and returns `{"networks":[...]}`. Each network MUST contain a stable non-empty `id` and an extensible `state` string. Initial states are `configured`, `connecting`, `connected`, `disconnecting`, `disconnected`, and `error`. A network MAY include a human-readable `name`. Clients MUST use `id`, not `name`, as the management identifier and MUST tolerate unknown states.
 
+A network MAY expose the following read-only observability fields:
+
+- `retry_seconds`: non-negative integer countdown until the next scheduled connection attempt. `0` means no positive retry delay is currently published.
+- `reconnect_attempts`: non-negative integer count of reconnect-path connection attempts during the current endpoint runtime instance. The initial startup connection attempt is not included. It resets when the endpoint runtime instance restarts.
+- `connected_seconds`: non-negative integer number of whole seconds for which the current upstream connection has remained continuously connected. It MUST be `0` when there is no current connected session and MUST reset when that session ends.
+- `paused`: boolean operator-control state. `true` means automatic connection/reconnection is intentionally paused; `false` means normal connection management is active.
+
+These fields are optional independently of the base `networks.list` contract. Their absence MUST NOT be interpreted as zero, false, or a particular connection policy. Clients MUST tolerate additional observability fields.
+
+These fields describe runtime state only. They MUST NOT expose credentials or authentication material. An implementation SHOULD avoid returning sensitive connection configuration unless a separate PBMP contract explicitly defines and authorizes it.
+
 ## General managed endpoint identity
 
 PBMP/1 M0 remains bot-oriented and keeps `bot.info` as a required method for the M0 bot profile. Non-bot services MUST NOT fabricate a bot identity merely to reuse PBMP.
