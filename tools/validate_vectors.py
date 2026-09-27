@@ -94,6 +94,13 @@ def validate_required_result(method, result):
                 raise ValueError("network requires non-empty id")
             if not isinstance(network.get("state"), str) or not network["state"]:
                 raise ValueError("network requires non-empty state")
+            for key in ("retry_seconds", "reconnect_attempts", "connected_seconds"):
+                if key in network and (isinstance(network[key], bool) or
+                                       not isinstance(network[key], int) or
+                                       network[key] < 0):
+                    raise ValueError(f"network {key} must be a non-negative integer")
+            if "paused" in network and not isinstance(network["paused"], bool):
+                raise ValueError("network paused must be boolean")
 
 
 def main():
