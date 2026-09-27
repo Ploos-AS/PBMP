@@ -1,0 +1,1 @@
+{"pbmp":1,"type":"response","id":"obs-1","ok":true,"result":{"networks":[{"id":"network-1","name":"Libera","state":"connected","retry_seconds":0,"reconnect_attempts":2,"connected_seconds":17,"paused":false}]}}
