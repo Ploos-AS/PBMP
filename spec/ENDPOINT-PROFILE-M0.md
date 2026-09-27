@@ -36,6 +36,8 @@ A successful result has this form:
 
 `id`, `kind`, `implementation.name`, `implementation.version`, and `state` MUST be non-empty strings. Endpoint IDs MUST be stable within the management endpoint. Clients MUST tolerate unknown `kind` and `state` values.
 
+An endpoint MAY include `uptime_seconds` in the `endpoint` object. When present, it MUST be a non-negative integer representing elapsed whole seconds since the current endpoint process/service instance started. It is runtime telemetry, not wall-clock time, and MUST reset when that instance restarts. Clients MUST NOT assume that its absence means the endpoint has just started.
+
 Initial generic kinds include `bot`, `agent`, `service`, and `gateway`. The value `bouncer` is defined for IRC bouncer/BNC services such as AmBNC.
 
 ## Optional IRC management
