@@ -103,6 +103,17 @@
           "not-tested"
         ]
       }
+    },
+    "qualified_extensions": {
+      "type": "object",
+      "description": "Optional conformance extensions exercised in addition to the selected base profile.",
+      "additionalProperties": {
+        "enum": [
+          "pass",
+          "fail",
+          "not-tested"
+        ]
+      }
     }
   },
   "additionalProperties": true,
