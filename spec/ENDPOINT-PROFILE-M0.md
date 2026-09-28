@@ -44,6 +44,14 @@ Initial generic kinds include `bot`, `agent`, `service`, and `gateway`. The valu
 
 An IRC-aware endpoint MAY advertise `networks.list`, `channels.list`, and other IRC-related PBMP capabilities. Their absence does not fail Endpoint Profile M0 qualification.
 
+## Network observability reference
+
+AmBNC is the initial reference implementation for the optional PBMP/1 `networks.list` runtime observability fields `retry_seconds`, `reconnect_attempts`, `connected_seconds`, and `paused` defined by the base PBMP/1 specification.
+
+AmBNC has been qualified with Endpoint Profile M0 against PBMP conformance-suite revision `b8c9ff18fca516a118a7a45001860e5de9c95da3`, including the network observability semantic vectors. This reference status does not make `networks.list` or any observability field mandatory for Endpoint Profile M0, and other implementations MAY expose the same standard fields with implementation-appropriate internal mechanisms.
+
+The reference contract is deliberately read-only and excludes network credentials and authentication material.
+
 ## Standalone operation
 
 PBMP remains optional infrastructure. Qualification against this profile MUST NOT require BotWeb, BotAI, or another Ploos service, and loss or disablement of PBMP MUST NOT stop the endpoint's primary service.
