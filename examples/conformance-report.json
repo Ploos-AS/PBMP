@@ -1,6 +1,6 @@
 {
   "pbmp": 1,
-  "profile": "M0",
+  "profile": "bot-m0",
   "implementation": {
     "name": "example-bot",
     "version": "0.1.0"
@@ -18,5 +18,8 @@
   "capabilities_tested": {
     "channels.list": "pass",
     "metrics.read": "not-tested"
+  },
+  "qualified_extensions": {
+    "network-observability": "not-tested"
   }
 }
