@@ -43,3 +43,10 @@ Consumer repositories SHOULD pin PBMP qualification to an immutable PBMP Git com
 A consumer CI job SHOULD check out the pinned PBMP revision, start the implementation under test with its local PBMP endpoint enabled, run `tools/qualify_endpoint.py`, and archive the resulting JSON report. Updating the pinned PBMP revision is an explicit requalification event.
 
 This rule keeps historical PASS reports reproducible even as PBMP gains new optional capabilities, stronger tests, or future profiles.
+
+
+## Optional qualified extensions
+
+A conformance report MAY include a `qualified_extensions` object for optional contracts exercised in addition to the selected base profile. Extension results use `pass`, `fail`, or `not-tested`. Their presence does not change which methods are required by the base profile.
+
+The standard extension identifier `network-observability` covers the optional `networks.list` runtime telemetry fields defined by PBMP/1: `retry_seconds`, `reconnect_attempts`, `connected_seconds`, and `paused`.
