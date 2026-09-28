@@ -58,6 +58,8 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--socket", required=True, help="Unix-domain socket path")
     parser.add_argument("--profile", choices=sorted(PROFILES), default="bot-m0")
+    parser.add_argument("--extension", action="append", choices=["network-observability"], default=[],
+                        help="Optional conformance extension to exercise")
     parser.add_argument("--implementation-name", required=True)
     parser.add_argument("--implementation-version", required=True)
     parser.add_argument("--output", default="pbmp-conformance-report.json")
@@ -73,6 +75,23 @@ def main():
             results[method] = "fail"
             failures.append(f"{method}: {exc}")
 
+    extensions = {}
+    if "network-observability" in args.extension:
+        try:
+            observed = request(args.socket, "networks.list", "pbmp-extension-network-observability")
+            networks = observed.get("networks", [])
+            if not networks:
+                raise ValueError("network-observability requires at least one network")
+            fields = ("retry_seconds", "reconnect_attempts", "connected_seconds", "paused")
+            for network in networks:
+                missing = [key for key in fields if key not in network]
+                if missing:
+                    raise ValueError("network missing observability fields: " + ", ".join(missing))
+            extensions["network-observability"] = "pass"
+        except Exception as exc:
+            extensions["network-observability"] = "fail"
+            failures.append(f"network-observability: {exc}")
+
     root = pathlib.Path(__file__).resolve().parents[1]
     report = {
         "pbmp": 1,
@@ -81,7 +100,8 @@ def main():
         "suite": {"revision": git_revision(root)},
         "result": "pass" if not failures else "fail",
         "required_methods": results,
-        "capabilities_tested": {}
+        "capabilities_tested": {},
+        "qualified_extensions": extensions
     }
     pathlib.Path(args.output).write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
     for failure in failures:
