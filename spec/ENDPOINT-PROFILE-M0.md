@@ -1,6 +1,6 @@
 # PBMP/1 Endpoint Profile M0
 
-Status: **M0 draft**
+Status: **M0 stable**
 
 The Endpoint Profile defines the minimum PBMP management contract for independently functional services that are not necessarily IRC bots. AmBNC is the initial reference consumer for this profile.
 
