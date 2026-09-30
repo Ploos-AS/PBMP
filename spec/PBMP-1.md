@@ -1,6 +1,6 @@
 # PBMP/1 — M0 specification
 
-Status: **M0 draft**
+Status: **M0 stable**
 
 ## Principles
 
